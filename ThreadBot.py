@@ -11,6 +11,7 @@ userlist=[]
 
 nick = 'ACRPostBot'
 debug = True 
+connected = False
 network = 'irc.freenode.net'
 port = 6667
 chan='#acreloaded-forum'
@@ -27,18 +28,26 @@ print(irc.recv(4096))
 irc.recv(4096)
 irc.send(bytes('NICK ' + nick + '\r\n', 'UTF-8'))
 irc.send(bytes('USER LEAP LEAPer LEAPer :LEAP IRC\r\n', 'UTF-8'))
+irc.settimeout(1)
 while True:
-	data = str(irc.recv(4096))
-	if debug:
+	try:
+		data = str(irc.recv(4096))
+	except socket.timeout:
+		data = ""
+	if debug and data != "":
 		print(data)
 	if data.find('PING') != -1: 
 		irc.send(bytes('PONG ' + data.split()[1] + '\r\n', 'UTF-8'))
 	if data.find('End of /MOTD command.') != -1: #check for welcome message
 		irc.send(bytes('JOIN ' + chan + '\r\n', 'UTF-8'))
+	if data.find(chan) != -1: #check for welcome message
+		connected = True
+		if debug:
+			print("connected")
 	if data.find('!quit')!=-1 and data.find('ruler501')!=-1:
 		break
 	times = millis = time.time()
-	if times-last > 15:
+	if int(times-last)%2 == 0:
 		last = times
 		feed=feedparser.parse(rssurl)
 		for ent in feed.entries:
