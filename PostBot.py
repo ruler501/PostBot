@@ -54,7 +54,6 @@ while True:
 			if title[:4] == "RE: ":
 				title = title[4:]
 			if ent.id not in posts:
-				print(posts)
 				posts.append(ent.id) #I think this is unique in practice, but theoretically could get duplicated
 				if len(title) > 30:
 					title = title[:26]+'...'#limits it to 30 characters(len(title[:26])==27)
@@ -64,6 +63,3 @@ while True:
 				sendMessage(out)
 				while len(posts) > 10:
 					posts.pop(0)
-			elif debug:
-				print(ent.title+' '+ent.id)
-				print(posts)
