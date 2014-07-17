@@ -27,8 +27,8 @@ irc.connect((network,port))
 print(irc.recv(4096))
 irc.recv(4096)
 irc.send(bytes('NICK ' + nick + '\r\n', 'UTF-8'))
-irc.send(bytes('USER LEAP LEAPer LEAPer :LEAP IRC\r\n', 'UTF-8'))
-irc.settimeout(1)
+irc.send(bytes('USER PostBot Poster Poster :PostBot IRC\r\n', 'UTF-8'))
+irc.settimeout(.5)
 while True:
 	try:
 		data = str(irc.recv(4096))
@@ -47,7 +47,7 @@ while True:
 	if data.find('!quit')!=-1 and data.find('ruler501')!=-1:
 		break
 	times = time.time()
-	if int(times-last)%2 == 0 and connected:
+	if int(times-last)%15 == 0 and connected:
 		feed=feedparser.parse(rssurl)
 		for ent in feed.entries:
 			title = ent.title
